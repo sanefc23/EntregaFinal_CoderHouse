@@ -1,0 +1,22 @@
+[
+    {
+        "id": 1,
+        "name": "Nintendo Switch OLED",
+        "description": "Nintendo Switch OLED 64GB, color NEON.",
+        "code": "NS0122",
+        "image": "https://assets.nintendo.com/image/upload/b_white,c_pad,f_auto,h_382,q_auto,w_573/ncom/en_US/switch/site-design-update/hardware/switch/nintendo-switch-oled-model-white-set/gallery/image01?v=2022021721",
+        "price": 92999.99,
+        "stock": 8,
+        "timestamp": "18-04-2020"
+    },
+    {
+        "id": 2,
+        "name": "Nintendo Switch OLED",
+        "description": "Nintendo Switch OLED 64GB, color NEON.",
+        "code": "NS0122",
+        "image": "https://assets.nintendo.com/image/upload/b_white,c_pad,f_auto,h_382,q_auto,w_573/ncom/en_US/switch/site-design-update/hardware/switch/nintendo-switch-oled-model-white-set/gallery/image01?v=2022021721",
+        "price": 92999.99,
+        "stock": 8,
+        "timestamp": "18-04-2020"
+    }
+]
