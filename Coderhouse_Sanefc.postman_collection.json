@@ -1,0 +1,293 @@
+{
+	"info": {
+		"_postman_id": "07f46206-7c51-406d-86c6-f276818ab458",
+		"name": "Coderhouse_Sanefc",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Listar Productos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/products/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"products",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar 1 Producto",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/products/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"products",
+								""
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Agregar Producto",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Pokemon Legends Arceus\",\r\n    \"description\": \"Leyendas Pokémon: Arceus (Pokémon Legends: Arceus en inglés, アルセウス en japonés) es un videojuego de la octava generación. La aventura se realiza en la región de Hisui. Fue lanzado el 28 de enero de 2022 para Nintendo Switch.\",\r\n    \"code\": \"MKD008\",\r\n    \"image\": \"https://static.wikia.nocookie.net/espokemon/images/0/0b/Car%C3%A1tula_de_Leyendas_Pok%C3%A9mon-_Arceus.png/revision/latest/scale-to-width-down/303?cb=20211022140956\",\r\n    \"price\": 15900,\r\n    \"stock\": 8\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/products/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"products",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Editar Producto",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\"name\": \"Pokemon Legends Arceus\",\r\n        \"description\": \"Pokémon Legends: Arceus es un videojuego de la octava generación. La aventura se realiza en la región de Hisui. Fue lanzado el 28 de enero de 2022 para Nintendo Switch.\",\r\n        \"code\": \"MKD008\",\r\n        \"image\": \"https://static.wikia.nocookie.net/espokemon/images/0/0b/Car%C3%A1tula_de_Leyendas_Pok%C3%A9mon-_Arceus.png/revision/latest/scale-to-width-down/303?cb=20211022140956\",\r\n        \"price\": 15900,\r\n        \"stock\": 8\r\n        }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/products/2c2d9fd8-98e8-487d-a158-20c2335af1c1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"products",
+								"2c2d9fd8-98e8-487d-a158-20c2335af1c1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Borrar Producto",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/products/f35afde5-bb5e-4787-abd5-1d797461f7be",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"products",
+								"f35afde5-bb5e-4787-abd5-1d797461f7be"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cart",
+			"item": [
+				{
+					"name": "Nuevo Carrito",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[{           \"id_prod\": \"be937b66-b29a-40a7-a6b7-31fb0d38b940\",\r\n            \"units\": 2\r\n},\r\n{           \"id_prod\": \"0578a5d7-45b0-40cd-8881-0d00be11be52\",\r\n            \"units\": 1\r\n}]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/cart",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Borrar Carrito",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/cart/9d55796d-3b2b-4870-b2cd-def31f88ab58",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"cart",
+								"9d55796d-3b2b-4870-b2cd-def31f88ab58"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Productos en Carrito",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/cart/1c/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"cart",
+								"1c",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Agregar Producto a Carrito",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id_prod\":\"62fe390e-22fb-4f1c-a2f9-dac940a59e4f\",\r\n    \"units\": 10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/cart/56055904-e9c9-451d-9d3a-26b6c8efc69c/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"cart",
+								"56055904-e9c9-451d-9d3a-26b6c8efc69c",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Producto en Carrito",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/cart/56055904-e9c9-451d-9d3a-26b6c8efc69c/products/be937b66-b29a-40a7-a6b7-31fb0d38b940",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"cart",
+								"56055904-e9c9-451d-9d3a-26b6c8efc69c",
+								"products",
+								"be937b66-b29a-40a7-a6b7-31fb0d38b940"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
