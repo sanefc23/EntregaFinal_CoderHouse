@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const productRouter = require('./routers/productRouter');
 const cartRouter = require('./routers/cartRouter');
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 const server = require("http").Server(app);
 
 app.use(express.json());

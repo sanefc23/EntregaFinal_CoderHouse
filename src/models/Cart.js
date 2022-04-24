@@ -1,7 +1,10 @@
-const { v4: uuidv4 } = require('uuid');
+const {
+    v4: uuidv4
+} = require('uuid');
 
 class Cart {
     constructor() {
+        this.id = uuidv4();
         this.timestamp = Date.now();
         this.products = [];
     }

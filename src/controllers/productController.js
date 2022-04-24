@@ -1,8 +1,5 @@
 const Product = require('../models/Product');
 const fs = require('fs');
-const {
-    log
-} = require('console');
 const file = 'src/productsTest.json';
 
 const productController = {
