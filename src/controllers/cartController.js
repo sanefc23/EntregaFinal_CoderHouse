@@ -1,80 +1,87 @@
 const Cart = require('../models/Cart');
-const fs = require('fs');
-const file = 'src/cartsTest.json';
+const cartSchema = require('../schemas/cartSchema');
 
 const cartController = {
-    create: async (req, res) => {
-        const newCart = new Cart();
-        await fs.promises.readFile(file, "utf-8")
-            .then(content => {
-                const carts = JSON.parse(content);
-                carts.push({
-                    ...newCart,
-                    products: req.body
+    create: (req, res) => {
+        const cart = new Cart();
+        cart.products.push(...req.body);
+        cartSchema.create(cart)
+            .then(created => {
+                res.json({
+                    cart_id: created.id
+                });
+            })
+            .catch(e => {
+                res.json(e);
+            });
+    },
+    delete: (req, res) => {
+        let id = req.params.id;
+        cartSchema.findByIdAndDelete(id)
+            .then(cart => {
+                res.status(200).send('Carrito borrado.');
+            })
+            .catch(e => {
+                res.send(e);
+            });
+    },
+    list: (req, res) => {
+        cartSchema.findById(req.params._id)
+            .then(cart => {
+                res.status(200).json(cart.products);
+            })
+            .catch(e => {
+                res.json(e)
+            });
+    },
+    addProd: (req, res) => {
+        cartSchema.findByIdAndUpdate(
+                req.params.cart_id, {
+                    $push: {
+                        "products": {
+                            ...req.body
+                        }
+                    }
+                }, {
+                    safe: true,
+                    upsert: true
                 })
-                console.log('updatedCarts: ', carts);
-                fs.writeFileSync(file, JSON.stringify(carts))
-                res.json(newCart.id)
-            }).catch(e => console.log(e));
-    },
-    delete: async (req, res) => {
-        await fs.promises.readFile(file, "utf-8")
-            .then(content => {
-                const carts = JSON.parse(content);
-                const updatedCarts = carts.filter(c => c.id != req.params.id);
-                if (carts.length != updatedCarts.length) {
-                    fs.writeFileSync(file, JSON.stringify(updatedCarts))
-                    res.json(updatedCarts)
-                } else {
-                    res.json('Carrito no encontrado.')
-                }
-            }).catch(e => console.log(e));
-    },
-    list: async (req, res) => {
-        await fs.promises.readFile(file, "utf-8")
-            .then(content => {
-                const carts = JSON.parse(content);
-                const foundCart = carts.filter(c => c.id == req.params.id);
-                if (foundCart.length > 0) {
-                    const cartProds = foundCart[0].products.map(p => p.id_prod)
-                    res.json(cartProds);
-                } else {
-                    res.json('Carrito no encontrado.')
-                }
-            }).catch(e => console.log(e));
-    },
-    addProd: async (req, res) => {
-        await fs.promises.readFile(file, "utf-8")
-            .then(content => {
-                const carts = JSON.parse(content);
-                const index = carts.findIndex(c => c.id == req.params.id);
-                if (index != -1) {
-                    carts[index].products.push({
-                        ...req.body
+            .then(() => {
+                cartSchema.findById(req.params.cart_id)
+                    .then(cart => {
+                        res.status(200).json(cart);
                     })
-                    fs.writeFileSync(file, JSON.stringify(carts))
-                    res.json(carts)
-                } else {
-                    res.json('Carrito no encontrado.')
-                }
-
-            }).catch(e => console.log(e));
+                    .catch(e => {
+                        res.json("Error deleting cart. ", e)
+                    })
+            })
+            .catch(e => console.log(e));
     },
-    removeProd: async (req, res) => {
-        await fs.promises.readFile(file, "utf-8")
-            .then(content => {
-                const carts = JSON.parse(content);
-                const index = carts.findIndex(c => c.id == req.params.id);
-                if (index != -1) {
-                    carts[index].products = carts[index].products.filter(p => p.id_prod != req.params.id_prod)
-                    fs.writeFileSync(file, JSON.stringify(carts))
-                    res.json(carts)
-                } else {
-                    res.json('Carrito no encontrado.')
-                }
-
-            }).catch(e => console.log(e));
-    },
+    removeProd: (req, res) => {
+        cartSchema.findById({
+                _id: req.params._id
+            })
+            .then(cart => {
+                const updatedProducts = cart.products.filter(p => p.id_prod != req.params.id_prod)
+                cartSchema.findByIdAndUpdate(req.params._id, {
+                        "products": updatedProducts
+                    }, {
+                        safe: true
+                    })
+                    .then(() => {
+                        cartSchema.findById(req.params._id)
+                            .then(cart => {
+                                res.status(200).json(cart);
+                            })
+                            .catch(e => {
+                                res.json("Error deleting product from cart. ", e)
+                            })
+                    })
+                    .catch(e => {
+                        res.json(e)
+                    })
+            })
+    }
 }
 
 module.exports = cartController;
