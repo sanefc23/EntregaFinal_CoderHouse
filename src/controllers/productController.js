@@ -15,7 +15,7 @@ const productController = {
                     }
                 })
                 .catch(e => {
-                    res.json(e);
+                    res.status(500).json(e);
                 })
         } else {
             productSchema.find().sort({
@@ -61,7 +61,7 @@ const productController = {
                 res.json(e);
             });
     },
-    delete: async (req, res) => {
+    delete: (req, res) => {
         productSchema.findByIdAndDelete(req.params._id)
             .then(prod => {
                 res.redirect('/api/products');
