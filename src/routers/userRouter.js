@@ -4,7 +4,7 @@ const userController = require("../controllers/userController");
 const passport = require('passport');
 const path = require('path');
 const multer = require('multer');
-const sendEmail = require('../middlewares/sendEmail');
+const sendRegisterEmail = require('../middlewares/sendRegisterEmail');
 
 // Multer implementation
 const storage = multer.diskStorage({
@@ -25,7 +25,7 @@ userRouter.post('/login', passport.authenticate('login', {
     successRedirect: '/api/user/session',
     failureFlash: true
 }));
-userRouter.post('/register', upload.any('file'), sendEmail ,passport.authenticate('register', {
+userRouter.post('/register', upload.any('file'), sendRegisterEmail, passport.authenticate('register', {
     failureRedirect: '/api/user/failedUser',
     successRedirect: '/api/user/session',
     failureFlash: true
