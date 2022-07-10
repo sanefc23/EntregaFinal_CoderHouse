@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const log4js = require('log4js');
+const config = require('../config/config.js')
 
 log4js.configure({
     appenders: {
@@ -36,7 +37,6 @@ log4js.configure({
         }
     }
 });
-
 
 passport.serializeUser((user, done) => {
     done(null, user.email);

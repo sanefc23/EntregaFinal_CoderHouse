@@ -4,11 +4,12 @@ const userController = require("../controllers/userController");
 const passport = require('passport');
 const path = require('path');
 const multer = require('multer');
+const sendEmail = require('../middlewares/sendEmail');
 
 // Multer implementation
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'public/productImages/')
+        cb(null, 'public/userAvatars/')
     },
     filename: (req, file, cb) => {
         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
@@ -24,7 +25,7 @@ userRouter.post('/login', passport.authenticate('login', {
     successRedirect: '/api/user/session',
     failureFlash: true
 }));
-userRouter.post('/register', upload.any('file'), passport.authenticate('register', {
+userRouter.post('/register', upload.any('file'), sendEmail ,passport.authenticate('register', {
     failureRedirect: '/api/user/failedUser',
     successRedirect: '/api/user/session',
     failureFlash: true
