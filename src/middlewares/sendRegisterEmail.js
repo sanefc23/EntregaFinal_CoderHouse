@@ -1,17 +1,8 @@
-const nodemailer = require('nodemailer');
+const sendEmail = require('../services/sendEmail');
 const config = require('../config/config');
 
 const sendRegisterEmail = async (req, res, next) => {
-    const transporter = nodemailer.createTransport({
-        host: 'smtp.ethereal.email',
-        port: 587,
-        auth: {
-            user: config.ETHEREAL_EMAIL,
-            pass: config.ETHEREAL_PASSWORD
-        }
-    });
-
-    const message = {
+    const emailMessage = {
         from: {
             name: config.ETHEREAL_NAME,
             address: config.ETHEREAL_EMAIL
@@ -20,17 +11,12 @@ const sendRegisterEmail = async (req, res, next) => {
         subject: `Nuevo Registro`,
         html: `
             <h1>Alerta de nuevo registro</h1>
-            <p>${req.session.passport.user} se ha registrado en la plataforma.</p>
+            <p>${req.session.passport.user ? req.session.passport.user : 'Usuario'} se ha registrado en la plataforma.</p>
             `,
     }
 
     try {
-        const response = await transporter.sendMail(message, (err, info) => {
-            if (err) {
-                console.log('Error occurred. ' + err.message);
-                return process.exit(1);
-            }
-        });
+        await sendEmail(emailMessage);
         next();
 
     } catch (err) {
