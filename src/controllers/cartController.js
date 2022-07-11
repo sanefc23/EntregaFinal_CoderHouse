@@ -98,12 +98,11 @@ const cartController = {
     },
     checkout: (req, res) => {
         const cart = JSON.parse(req.cookies.userCart);
-        const content = `Anda?`;
         userSchema.findOne({
                 email: cart.user
             })
             .then(async userData => {
-                console.log('PARAMS:', userData.phone);
+                const content = `Hola ${userData.name}! Recibimos correctamente tu orden #${cart._id}.\nLo vas a estar recibiendo en tu domicilio ${userData.adress}.\nProductos:\n${cart.products.map(p => `${p.id_prod} x ${p.units}\n`)}`;
                 const response = await sendWPMessage(userData.phone, content)
                 res.json(response)
             })
