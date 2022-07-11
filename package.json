@@ -6,12 +6,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/server.js",
-    "dev": "nodemon src/server.js"
+    "dev": "nodemon src/server.js",
+    "artillery:fork": "artillery run artillery.yml",
+    "artillery:cluster": "artillery quick --count 50 -n 40 http://localhost:8080/randoms/10000"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@types/nodemailer": "^6.4.4",
+    "artillery": "^2.0.0-20",
     "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",
     "connect-flash": "^0.1.1",
