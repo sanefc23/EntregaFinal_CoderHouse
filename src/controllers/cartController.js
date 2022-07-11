@@ -2,6 +2,8 @@ const Cart = require('../models/Cart');
 const cartSchema = require('../schemas/cartSchema');
 const userSchema = require('../schemas/userSchema');
 const sendWPMessage = require('../services/twilio');
+const sendEmail = require('../services/sendEmail');
+const config = require('../config/config');
 
 
 const cartController = {
@@ -103,8 +105,25 @@ const cartController = {
             })
             .then(async userData => {
                 const content = `Hola ${userData.name}! Recibimos correctamente tu orden #${cart._id}.\nLo vas a estar recibiendo en tu domicilio ${userData.adress}.\nProductos:\n${cart.products.map(p => `${p.id_prod} x ${p.units}\n`)}`;
+                const emailMessage = {
+                    from: {
+                        name: config.ETHEREAL_NAME,
+                        address: config.ETHEREAL_EMAIL
+                    },
+                    to: config.ETHEREAL_EMAIL,
+                    subject: `Recibimos tu orden #${cart._id}`,
+                    html: `
+                        <h1>Hola ${userData.name}! Recibimos correctamente tu orden #${cart._id}.</h1>
+                        <p>Lo vas a estar recibiendo en tu domicilio ${userData.adress}.\nProductos:\n${cart.products.map(p => `${p.id_prod} x ${p.units}\n`)}</p>
+                        `,
+                }
+
                 const response = await sendWPMessage(userData.phone, content)
-                res.json(response)
+                const email = await sendEmail(emailMessage)
+                res.json({
+                    response,
+                    email
+                })
             })
             .catch(e => console.log(e));
     }
