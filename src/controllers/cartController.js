@@ -1,12 +1,23 @@
 const Cart = require('../models/Cart');
 const cartSchema = require('../schemas/cartSchema');
+const userSchema = require('../schemas/userSchema');
+const sendWPMessage = require('../services/twilio');
+
 
 const cartController = {
     create: (req, res) => {
-        const cart = new Cart();
+        let cart = new Cart();
+        console.log(req.session.passport);
+        cart = {
+            ...cart,
+            ...req.session.passport
+        }
         cart.products.push(...req.body);
         cartSchema.create(cart)
             .then(created => {
+                res.cookie('userCart', JSON.stringify(created), {
+                    maxAge: 60 * 100000
+                });
                 res.json({
                     cart_id: created.id
                 });
@@ -49,6 +60,9 @@ const cartController = {
             .then(() => {
                 cartSchema.findById(req.params.cart_id)
                     .then(cart => {
+                        res.cookie('userCart', JSON.stringify(cart), {
+                            maxAge: 60 * 10000
+                        });
                         res.status(200).json(cart);
                     })
                     .catch(e => {
@@ -81,6 +95,19 @@ const cartController = {
                         res.json(e)
                     })
             })
+    },
+    checkout: (req, res) => {
+        const cart = JSON.parse(req.cookies.userCart);
+        const content = `Anda?`;
+        userSchema.findOne({
+                email: cart.user
+            })
+            .then(async userData => {
+                console.log('PARAMS:', userData.phone);
+                const response = await sendWPMessage(userData.phone, content)
+                res.json(response)
+            })
+            .catch(e => console.log(e));
     }
 }
 

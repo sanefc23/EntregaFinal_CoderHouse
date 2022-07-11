@@ -8,6 +8,7 @@ const cartSchema = new Schema({
         id_prod: String,
         units: Number
     }, ],
+    user: String
 });
 
 module.exports = mongoose.model('cart', cartSchema);
