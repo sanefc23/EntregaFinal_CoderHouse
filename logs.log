@@ -1,0 +1,14 @@
+[2022-07-11T16:44:03.295] [WARN] file1 - Invalid Password
+[2022-07-11T16:47:52.720] [ERROR] file1 - User already exists!
+[2022-07-11T17:04:09.987] [ERROR] file1 - Invalid Password
+[2022-07-11T17:04:29.076] [ERROR] file1 - Invalid Password
+[2022-07-11T17:04:58.484] [INFO] file1 - Logged in!
+[2022-07-11T17:13:04.582] [INFO] file1 - Logged in!
+[2022-07-11T17:13:08.789] [INFO] file1 - Creado carrido:  {
+  timestamp: 1657570388587,
+  products: [
+    { id_prod: '627af838b435aeac85e48397', units: 1 },
+    { id_prod: '627af7f6b435aeac85e48396', units: 1 }
+  ],
+  user: 'test23@mail.com'
+}

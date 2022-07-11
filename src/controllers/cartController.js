@@ -4,12 +4,11 @@ const userSchema = require('../schemas/userSchema');
 const sendWPMessage = require('../services/twilio');
 const sendEmail = require('../services/sendEmail');
 const config = require('../config/config');
-
+const logger = require('../services/logger');
 
 const cartController = {
     create: (req, res) => {
         let cart = new Cart();
-        console.log(req.session.passport);
         cart = {
             ...cart,
             ...req.session.passport
@@ -17,6 +16,7 @@ const cartController = {
         cart.products.push(...req.body);
         cartSchema.create(cart)
             .then(created => {
+                logger.info('Creado carrido: ', cart)
                 res.cookie('userCart', JSON.stringify(created), {
                     maxAge: 60 * 100000
                 });
@@ -25,6 +25,7 @@ const cartController = {
                 });
             })
             .catch(e => {
+                logger.error(e);
                 res.json(e);
             });
     },
@@ -32,9 +33,11 @@ const cartController = {
         let id = req.params.id;
         cartSchema.findByIdAndDelete(id)
             .then(cart => {
+                logger.info('Borrado carrito: ', cart)
                 res.status(200).send('Carrito borrado.');
             })
             .catch(e => {
+                logger.error(e);
                 res.send(e);
             });
     },
@@ -44,6 +47,7 @@ const cartController = {
                 res.status(200).json(cart.products);
             })
             .catch(e => {
+                logger.error(e);
                 res.json(e)
             });
     },
@@ -68,10 +72,11 @@ const cartController = {
                         res.status(200).json(cart);
                     })
                     .catch(e => {
+                        logger.error(e);
                         res.json("Error deleting cart. ", e)
                     })
             })
-            .catch(e => console.log(e));
+            .catch(e => logger.error(e));
     },
     removeProd: (req, res) => {
         cartSchema.findById({
@@ -90,10 +95,12 @@ const cartController = {
                                 res.status(200).json(cart);
                             })
                             .catch(e => {
+                                logger.error(e);
                                 res.json("Error deleting product from cart. ", e)
                             })
                     })
                     .catch(e => {
+                        logger.error(e);
                         res.json(e)
                     })
             })
@@ -125,7 +132,7 @@ const cartController = {
                     email
                 })
             })
-            .catch(e => console.log(e));
+            .catch(e => logger.error(e));
     }
 }
 

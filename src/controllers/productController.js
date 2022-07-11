@@ -1,5 +1,6 @@
 const Product = require('../models/Product');
 const productSchema = require('../schemas/productSchema');
+const logger = require('../services/logger');
 
 const productController = {
     getAll: (req, res) => {
@@ -15,6 +16,7 @@ const productController = {
                     }
                 })
                 .catch(e => {
+                    logger.error(e);
                     res.status(500).json(e);
                 })
         } else {
@@ -29,6 +31,7 @@ const productController = {
                     }
                 })
                 .catch(e => {
+                    logger.error(e);
                     res.json(e);
                 })
         }
@@ -41,29 +44,32 @@ const productController = {
         };
         productSchema.create(newProd)
             .then(() => {
+                logger.info('Producto creado')
                 res.redirect('/api/products')
             })
             .catch(e => {
+                logger.error(e);
                 res.json(e);
             });
     },
     update: (req, res) => {
-
         const updatedProd = {
             ...req.body
         };
-
         productSchema.findByIdAndUpdate(req.params._id, updatedProd)
             .then(prod => {
+                logger.info('Producto actualizado')
                 res.redirect('/api/products')
             })
             .catch(e => {
+                logger.error(e);
                 res.json(e);
             });
     },
     delete: (req, res) => {
         productSchema.findByIdAndDelete(req.params._id)
             .then(prod => {
+                logger.info('Producto eliminado')
                 res.redirect('/api/products');
             })
             .catch(e => {

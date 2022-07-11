@@ -32,9 +32,6 @@ userRouter.post('/register', upload.any('file'), sendRegisterEmail, passport.aut
 }));
 userRouter.get('/session', userController.verifySession);
 userRouter.get('/failedUser', userController.failedUser);
-userRouter.post('/logout', function (req, res) {
-    req.logout();
-    res.redirect('/');
-});
+userRouter.post('/logout', userController.logout);
 
 module.exports = userRouter;

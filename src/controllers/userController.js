@@ -3,40 +3,7 @@ const User = require('../models/User');
 const bcrypt = require("bcryptjs");
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const log4js = require('log4js');
-const config = require('../config/config.js')
-
-log4js.configure({
-    appenders: {
-        warnings: {
-            type: "file",
-            filename: "warn.log",
-            level: 'warn'
-        },
-        errors: {
-            type: "file",
-            filename: "error.log",
-            level: 'error'
-        },
-        all: {
-            type: "console"
-        },
-    },
-    categories: {
-        file1: {
-            appenders: ["warnings"],
-            level: "warn"
-        },
-        file2: {
-            appenders: ["errors"],
-            level: "error"
-        },
-        default: {
-            appenders: ["all"],
-            level: "trace"
-        }
-    }
-});
+const logger = require('../services/logger');
 
 passport.serializeUser((user, done) => {
     done(null, user.email);
@@ -61,20 +28,23 @@ passport.use('login', new LocalStrategy({
             (err, user) => {
                 if (err) {
                     message = "Login error " + err
+                    logger.error(message)
                     req.flash('Login error: ', err)
                     return done(err);
                 }
                 if (!user) {
                     message = `User not found with email: ${userName}`;
+                    logger.warn(message)
                     req.flash('User not found with email: ', userName);
                     return done(null, false, req.flash('User not found!'))
                 }
                 if (!bcrypt.compareSync(password, user.password)) {
                     message = 'Invalid Password';
-                    console.log('Invalid Password');
+                    logger.warn(message)
                     return done(null, false, req.flash('Invalid Password'))
                 }
                 message = "Logged in!"
+                logger.info(message)
                 return done(null, user);
             }
         )
@@ -92,11 +62,13 @@ passport.use('register', new LocalStrategy({
             },
             (err, user) => {
                 if (err) {
+                    logger.error('Register error: ', err)
                     req.flash('Register error: ', err);
                     return done(err);
                 }
                 if (user) {
                     message = 'User already exists!'
+                    logger.warn(message)
                     return done(null, false, req.flash('User already exists'));
                 } else if (password === req.body.passwordCheck) {
                     let encrytedPassword = bcrypt.hashSync(password, 10);
@@ -110,6 +82,7 @@ passport.use('register', new LocalStrategy({
                     return done(null, user);
                 } else {
                     message = 'Passwords do not match!'
+                    logger.warn(message)
                     return done(null, false, req.flash('Passwords do not match!'))
                 }
             }
@@ -123,7 +96,19 @@ const userController = {
         res.send(req.session)
     },
     failedUser: (req, res) => {
+        logger.error(message)
         res.send(message)
+    },
+    logout: (req, res) => {
+        logger.info(`${req.session.passport} logged out.`);
+        req.session.destroy();
+        res.cookie("connect.sid", null, {
+            maxAge: 1
+        });
+        res.cookie("userCart", null, {
+            maxAge: 1
+        });
+        res.send('Logged out.')
     }
 }
 
